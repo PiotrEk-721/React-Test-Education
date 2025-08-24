@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import "@testing-library/jest-dom/extend-expect";
 import { convertUSDToPLN } from "./../../utils/convertUSDToPLN";
 import { convertPLNToUSD } from "./../../utils/convertPLNToUSD";
 import { formatAmountInCurrency } from "./../../utils/formatAmountInCurrency";
@@ -14,11 +15,19 @@ const ResultBox = ({ from, to, amount }) => {
 
   const formattedAmount = useMemo(() => formatAmountInCurrency(amount, from), [amount, from]);
 
-  return (
-    <div className={styles.result}>
-      {formattedAmount} = {convertedAmount}
-    </div>
-  );
+  if (amount < 0) {
+    return (
+      <div className={styles.result} data-testid="output">
+        "Wrong value…"
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.result} data-testid="output">
+        {formattedAmount} = {convertedAmount}
+      </div>
+    );
+  }
 };
 
 ResultBox.propTypes = {
